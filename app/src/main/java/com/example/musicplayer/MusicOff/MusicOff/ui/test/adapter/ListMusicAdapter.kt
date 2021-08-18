@@ -1,4 +1,4 @@
-package com.example.musicplayer.ui.test.adapter
+package com.example.musicplayer.MusicOff.MusicOff.ui.test.adapter
 
 
 import android.view.LayoutInflater
@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.musicplayer.R
 
-import com.example.musicplayer.db.entity.Music
+import com.example.musicplayer.MusicOff.MusicOff.model.Music
 import kotlinx.android.synthetic.main.itiem_music.view.*
-import kotlinx.android.synthetic.main.music_detail.view.*
-import java.io.File
+
 // no contructor ko tạo second contructor ở dưới như thế để ntn này luôn ok
 class ListMusicAdapter (private val inter: IlistMusic, list: MutableList<Music>) :
     RecyclerView.Adapter<ListMusicAdapter.listMusicViewHolder>() {

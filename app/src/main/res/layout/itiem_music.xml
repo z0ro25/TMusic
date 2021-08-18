@@ -1,40 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <LinearLayout
         android:id="@+id/items"
-        android:layout_marginHorizontal="10dp"
-        android:background="#9E9E9E"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/image_music"
-            android:src="@drawable/a"
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="#4FC3F7"
+        android:orientation="horizontal">
 
-            android:orientation="vertical"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_music"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/a" />
+
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Name"
+                    android:textColor="#000" />
+
+                <TextView
+                    android:id="@+id/artist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="artist"
+                    android:textColor="#000" />
+            </LinearLayout>
             <TextView
-                android:textColor="#fff"
-                android:id="@+id/name"
-                android:text="Name"
-                android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:textColor="#fff"
-                android:id="@+id/artist"
-                android:text="artist"
-                android:padding="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:id="@+id/icon_favorite"
+                android:layout_gravity="center"
+                android:background="@drawable/baseline_favorite_border_black_24dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

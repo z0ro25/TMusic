@@ -1,4 +1,4 @@
-package com.example.musicplayer.ui.test
+package com.example.musicplayer.MusicOff.MusicOff.ui.test
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -9,28 +9,31 @@ import android.os.Looper
 import android.text.TextUtils
 import android.view.View
 import android.widget.SeekBar
-import androidx.core.graphics.drawable.toIcon
 import com.example.musicplayer.R
-import com.example.musicplayer.db.entity.Music
-import com.example.musicplayer.model.MusicOff.MainActivity
+import com.example.musicplayer.MusicOff.MusicOff.model.Music
+import com.example.musicplayer.Main_LayoutActivity
 import com.t3h.mvvm.ui.base.BaseActivity
-import kotlinx.android.synthetic.main.itiem_music.*
 import kotlinx.android.synthetic.main.music_detail.*
 import java.lang.Exception
+import java.util.*
+import kotlin.collections.ArrayList
 
 // 1 namimg convention
- // ten class
+// ten class
 // ten ham
 // ten bien
 
-class musicdetailActivity : BaseActivity(), View.OnClickListener, MusicPlayer.IMusicPlayer {
+class MusicDetailActivity : BaseActivity(), View.OnClickListener, MusicPlayer.IMusicPlayer {
     private var listsong: ArrayList<Music>? = null
-    private var songs : Music?= null
+    private var songs: Music? = null
     private var pos = 0
-    var handler : Handler? = null
-    companion object{
-        private var musicmanager :MusicPlayer?= null
+    private var repeat : Boolean = false
+    var handler: Handler? = null
+
+    companion object {
+        private var musicmanager: MusicPlayer? = null
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.music_detail)
@@ -42,12 +45,12 @@ class musicdetailActivity : BaseActivity(), View.OnClickListener, MusicPlayer.IM
         ArtistDT.ellipsize = TextUtils.TruncateAt.MARQUEE
         NameDT.isSelected = true
         ArtistDT.isSelected = true
-        if (musicmanager == null){
+        if (musicmanager == null) {
             musicmanager = MusicPlayer(this)
         }
         getparam()
         preparemusic()
-        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+        seekbar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             }
 
@@ -65,12 +68,13 @@ class musicdetailActivity : BaseActivity(), View.OnClickListener, MusicPlayer.IM
     private fun preparemusic() {
         musicmanager?.setDataSong(songs!!.path!!)
         musicmanager?.startSong()
-        player.setImageResource(R.drawable.baseline_play_circle_filled_white_24dp)
-        Max_timer.text  = makeTextTime(musicmanager!!.getDurationSong().toLong())
+//        player.setImageResource(R.drawable.baseline_play_circle_outline_black_24dp)
+        Max_timer.text = makeTextTime(musicmanager!!.getDurationSong().toLong())
     }
+
     private fun makeTextTime(duration: Long): String {
         var time = ""
-        var Hour =duration / (1000 * 60 * 60)
+        var Hour = duration / (1000 * 60 * 60)
         var min = (duration / (1000 * 60)) % (60)
         var sec = (duration / (1000)) % 60
         if (duration >= (1000 * 60 * 60)) {
@@ -91,58 +95,81 @@ class musicdetailActivity : BaseActivity(), View.OnClickListener, MusicPlayer.IM
     }
 
     override fun onClick(v: View) {
-        var nextpos = pos +1
-        var prepos = pos -1
-        when(v.id){
-            R.id.btn_back->{
-                val intent = Intent(this@musicdetailActivity,MainActivity::class.java)
-                startActivity(intent)
+        var nextpos = pos + 1
+        var prepos = pos - 1
+        when (v.id) {
+            R.id.btn_back -> {
+                var inten = Intent(this, Main_LayoutActivity::class.java)
+                startActivity(inten)
             }
-            R.id.player ->{
-                if (musicmanager!!.isSongPlaying() == true){
-                    musicmanager?.startSong()
-                    player.setImageResource(R.drawable.baseline_pause_circle_filled_white_24dp)
-                }else{
+            R.id.player -> {
+                if (musicmanager!!.isSongPlaying() == true) {
                     musicmanager?.pauseSong()
-                    player.setImageResource(R.drawable.baseline_play_circle_filled_white_24dp)
+                    player.setImageResource(R.drawable.baseline_play_circle_outline_black_24dp)
+                } else {
+                    player.setImageResource(R.drawable.baseline_pause_circle_outline_black_24dp)
+                    musicmanager?.startSong()
                 }
             }
-            R.id.skip_next->{
-                if (nextpos == listsong!!.size)
-                    nextpos = 0
-                UpdatesongUI(nextpos)
+            R.id.skip_next -> {
+//                if (nextpos == listsong!!.size)
+//                    nextpos = 0
+//                UpdatesongUI(nextpos)
+                if (repeat == false) {
+                    if (nextpos == listsong!!.size)
+                        nextpos = 0
+                    UpdatesongUI(nextpos)
+                } else {
+                    var posst = musicmanager!!.currentPosition
+                    UpdatesongUI(posst)
+                }
+
             }
-            R.id.skip_back->{
+            R.id.skip_back -> {
                 if (prepos < 0)
                     prepos = listsong!!.size - 1
                 UpdatesongUI(prepos)
             }
+            R.id.btn_shuffle -> {
+                var random : Random = Random()
+                var randompos = random.nextInt(listsong!!.size)
+
+            }
+            R.id.btn_repeat -> {
+                if (repeat == false) btn_repeat.setImageResource(R.drawable.baseline_repeat_on_black_24dp)
+                else {
+                    repeat = true
+                    btn_repeat.setImageResource(R.drawable.baseline_repeat_black_24dp)
+                }
+            }
         }
     }
 
-    private fun UpdatesongUI(newpos : Int) {
+
+    private fun UpdatesongUI(newpos: Int) {
         songs = listsong!![newpos]
         pos = newpos
         musicmanager!!.doNextOrPrev(songs!!)
         NameDT.text = songs!!.Name
         ArtistDT.text = songs!!.artist
         Max_timer.text = makeTextTime(musicmanager!!.getDurationSong().toLong())
-        animationImg(img_musicDL,1000)
+        animationImg(img_musicDL, 1000)
         checkIconPlay()
-        handler = null
         initseekbar()
+        handler = null
+
     }
 
     private fun initseekbar() {
         seekbar.max = musicmanager!!.getDurationSong()
         // decrept roi k dc dung
-        Handler(Looper.getMainLooper()).postDelayed(object : Runnable{
+        Handler(Looper.getMainLooper()).postDelayed(object : Runnable {
             override fun run() {
                 try {
                     seekbar.progress = musicmanager!!.getCurrentPositionSong()
                     timer.text = makeTextTime(musicmanager!!.getCurrentPositionSong().toLong())
-                    handler!!.postDelayed(this,1000)
-                }catch (e: Exception){
+                    handler!!.postDelayed(this, 1000)
+                } catch (e: Exception) {
                     seekbar.progress = 0
                 }
             }
@@ -162,17 +189,18 @@ class musicdetailActivity : BaseActivity(), View.OnClickListener, MusicPlayer.IM
 
     }
 
-    private fun animationImg(v: View,duration: Long) {
+    private fun animationImg(v: View, duration: Long) {
         var animator = ObjectAnimator.ofFloat(img_musicDL, "rotation", 0f, 360f)
         animator.duration = duration
         var aniSet = AnimatorSet()
         aniSet.playTogether(animator)
         aniSet.start()
     }
-    fun getparam(){
+
+    fun getparam() {
         var inten = intent
         listsong = inten.getParcelableArrayListExtra("listsong")
-        pos = inten.getIntExtra("poss",0)
+        pos = inten.getIntExtra("poss", 0)
         songs = listsong?.get(pos)
         NameDT.text = songs!!.Name
         ArtistDT.text = songs!!.artist
@@ -181,15 +209,16 @@ class musicdetailActivity : BaseActivity(), View.OnClickListener, MusicPlayer.IM
 
     private fun checkIconPlay() {
         if (musicmanager!!.isSongPlaying() == true) {
-            player.setImageResource(R.drawable.baseline_pause_circle_filled_white_24dp)
+            player.setImageResource(R.drawable.baseline_pause_circle_outline_black_24dp)
         } else {
-            player.setImageResource(R.drawable.baseline_play_circle_filled_white_24dp)
+            player.setImageResource(R.drawable.baseline_play_circle_outline_black_24dp)
         }
     }
+
     override fun autoNextSong() {
         var nexsong = pos + 1
-        if (nexsong == listsong!!.size){
-                nexsong =0
+        if (nexsong == listsong!!.size) {
+            nexsong = 0
         }
         UpdatesongUI(nexsong)
     }

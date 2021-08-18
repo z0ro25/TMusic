@@ -1,7 +1,7 @@
-package com.example.musicplayer.ui.test
+package com.example.musicplayer.MusicOff.MusicOff.ui.test
 
 import android.media.MediaPlayer
-import com.example.musicplayer.db.entity.Music
+import com.example.musicplayer.MusicOff.MusicOff.model.Music
 
 // hoc may cai kotlin .let .run . apply con gi nua ko
 

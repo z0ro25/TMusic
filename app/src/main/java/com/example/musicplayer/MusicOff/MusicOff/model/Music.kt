@@ -1,6 +1,5 @@
-package com.example.musicplayer.db.entity
+package com.example.musicplayer.MusicOff.MusicOff.model
 
-import android.media.Image
 import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable

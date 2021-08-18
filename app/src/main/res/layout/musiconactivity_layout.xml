@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:id="@+id/btn_exit"
+            android:background="@drawable/baseline_keyboard_arrow_left_black_24dp"
+            android:backgroundTint="#ffffff"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+        <TextView
+            android:layout_marginLeft="90dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enjoy your linsten"
+            android:textSize="20dp"
+            android:gravity="center"
+            />
+        <Button
+            android:layout_marginLeft="80dp"
+            android:id="@+id/btn_search"
+            android:background="@drawable/baseline_search_black_24dp"
+            android:backgroundTint="#ffffff"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+    </LinearLayout>
+    <com.google.android.material.tabs.TabLayout
+        app:tabSelectedTextColor="@color/black"
+        android:id="@+id/tl_menu"
+        android:background="#0288D1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        />
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_main"
+        android:background="#E0E0E0"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+</LinearLayout>
